@@ -11,10 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- *
- *
  * @property float $amount
+ *
  * @method static create(array $array)
+ *
  * @property int $id
  * @property int $from_currency_id
  * @property int $to_currency_id
@@ -23,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Currency $fromCurrency
  * @property-read Currency $toCurrency
+ *
  * @method static ConversionFactory factory($count = null, $state = [])
  * @method static Builder|Conversion newModelQuery()
  * @method static Builder|Conversion newQuery()
@@ -34,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Conversion whereId($value)
  * @method static Builder|Conversion whereToCurrencyId($value)
  * @method static Builder|Conversion whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Conversion extends Model
@@ -51,17 +53,11 @@ class Conversion extends Model
         'conversion' => 'float',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function fromCurrency(): BelongsTo
     {
         return $this->belongsTo(Currency::class, 'from_currency_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function toCurrency(): BelongsTo
     {
         return $this->belongsTo(Currency::class, 'to_currency_id');

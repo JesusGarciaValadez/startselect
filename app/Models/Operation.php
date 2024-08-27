@@ -11,13 +11,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- *
- *
  * @property float $amount
  * @property string $currency
+ *
  * @method static create(array $array)
  * @method static latest()
  * @method static findOrFail(string $id)
+ *
  * @property int $id
  * @property int $currency_id
  * @property string $operation
@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property float $result
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static OperationFactory factory($count = null, $state = [])
  * @method static Builder|Operation newModelQuery()
  * @method static Builder|Operation newQuery()
@@ -38,6 +39,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Operation whereOperation($value)
  * @method static Builder|Operation whereResult($value)
  * @method static Builder|Operation whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Operation extends Model
@@ -61,9 +63,6 @@ class Operation extends Model
         'result' => 'float',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);

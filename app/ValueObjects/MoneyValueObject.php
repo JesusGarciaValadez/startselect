@@ -8,21 +8,13 @@ use TypeError;
 
 class MoneyValueObject
 {
-    /**
-     * @var float
-     */
     private float $amount;
 
-    /**
-     * @var string
-     */
     private string $currency;
 
     /**
      * Constructor expects both amount and currency.
      *
-     * @param float $amount
-     * @param string $currency
      * @throws InvalidArgumentException
      * @throws TypeError
      */
@@ -35,25 +27,16 @@ class MoneyValueObject
         $this->setCurrency($currency);
     }
 
-    /**
-     * @return float
-     */
     public function getAmount(): float
     {
         return $this->amount;
     }
 
-    /**
-     * @return string
-     */
     public function getCurrency(): string
     {
         return $this->currency;
     }
 
-    /**
-     * @return int
-     */
     public function getCurrencyId(): int
     {
         return Currency::key($this->currency);
@@ -62,8 +45,6 @@ class MoneyValueObject
     /**
      * Validate and set the amount.
      *
-     * @param float $amount
-     * @return void
      * @throws TypeError
      */
     public function setAmount(float $amount): void
@@ -74,8 +55,6 @@ class MoneyValueObject
     /**
      * Validate and set the currency.
      *
-     * @param string $currency
-     * @return void
      * @throws InvalidArgumentException
      */
     public function setCurrency(string $currency): void
@@ -84,7 +63,7 @@ class MoneyValueObject
             throw new InvalidArgumentException('Currency must be provided.');
         }
 
-        if (!Currency::key(strtoupper($currency))) {
+        if (! Currency::key(strtoupper($currency))) {
             throw new InvalidArgumentException('Invalid currency code.');
         }
 
@@ -94,70 +73,60 @@ class MoneyValueObject
     /**
      * Add two MoneyValueObject instances.
      *
-     * @param float $other
-     * @return MoneyValueObject
      * @throws InvalidArgumentException
      */
     public function add(float $other): MoneyValueObject
     {
         $result = bcadd($this->getAmount(), (string) $other, 10); // Use high precision
+
         return new self(amount: $result, currency: $this->getCurrency());
     }
 
     /**
      * Subtract one MoneyValueObject from another.
      *
-     * @param float $other
-     * @return MoneyValueObject
      * @throws InvalidArgumentException
      */
     public function subtract(float $other): MoneyValueObject
     {
-        $result = bcsub($this->getAmount(), (string)$other, 10); // Use high precision
+        $result = bcsub($this->getAmount(), (string) $other, 10); // Use high precision
+
         return new self(amount: $result, currency: $this->getCurrency());
     }
 
     /**
      * Multiply the MoneyValueObject by a factor.
-     *
-     * @param float $factor
-     * @return MoneyValueObject
      */
     public function multiply(float $factor): MoneyValueObject
     {
         $result = bcmul($this->getAmount(), (string) $factor, 10); // Use high precision
+
         return new self(amount: $result, currency: $this->getCurrency());
     }
 
     /**
      * Divide the MoneyValueObject by a divisor.
-     *
-     * @param float $divisor
-     * @return MoneyValueObject
      */
     public function divide(float $divisor): MoneyValueObject
     {
         $result = bcdiv($this->getAmount(), (string) $divisor, 10); // Use high precision
+
         return new self(amount: $result, currency: $this->getCurrency());
     }
 
     /**
      * Apply a percentage discount.
-     *
-     * @param float $percentage
-     * @return MoneyValueObject
      */
     public function applyDiscount(float $percentage): MoneyValueObject
     {
-        $discountedAmount = bcmul($this->getAmount(), (string)((100 - $percentage) / 100), 10);
+        $discountedAmount = bcmul($this->getAmount(), (string) ((100 - $percentage) / 100), 10);
+
         return new self(amount: $discountedAmount, currency: $this->getCurrency());
     }
 
     /**
      * Convert the MoneyValueObject to a different currency.
      *
-     * @param string $toCurrency
-     * @return MoneyValueObject
      * @throws InvalidArgumentException
      */
     public function convertTo(string $toCurrency): MoneyValueObject
@@ -185,7 +154,7 @@ class MoneyValueObject
         $rateFrom = 1;
         $rateTo = $exchangeRates[$currencyToConvert->value];
 
-        $convertedAmount = bcmul($this->getAmount(), (string)($rateTo / $rateFrom), 10);
+        $convertedAmount = bcmul($this->getAmount(), (string) ($rateTo / $rateFrom), 10);
 
         return new self($convertedAmount, $toCurrency);
     }
@@ -193,23 +162,18 @@ class MoneyValueObject
     /**
      * Ensure that both MoneyValueObject instances have the same currency.
      *
-     * @param MoneyValueObject $other
      * @throws InvalidArgumentException
      */
     private function ensureSameCurrency(MoneyValueObject $other): void
     {
         if ($this->getCurrency() !== $other->getCurrency()) {
-            throw new InvalidArgumentException('Currency mismatch between ' . $this->getCurrency() . ' and ' . $other->getCurrency());
+            throw new InvalidArgumentException('Currency mismatch between '.$this->getCurrency().' and '.$other->getCurrency());
         }
     }
 
-    /**
-     * @param array $moneyObjects
-     * @return MoneyValueObject
-     */
     public static function min(array $moneyObjects): MoneyValueObject
     {
-        return array_reduce($moneyObjects, static function($a, $b) {
+        return array_reduce($moneyObjects, static function ($a, $b) {
             if ($a === null) {
                 return $b;
             }
@@ -218,13 +182,9 @@ class MoneyValueObject
         });
     }
 
-    /**
-     * @param array $moneyObjects
-     * @return MoneyValueObject
-     */
     public static function max(array $moneyObjects): MoneyValueObject
     {
-        return array_reduce($moneyObjects, static function($a, $b) {
+        return array_reduce($moneyObjects, static function ($a, $b) {
             if ($a === null) {
                 return $b;
             }
@@ -233,36 +193,30 @@ class MoneyValueObject
         });
     }
 
-    /**
-     * @param array $moneyObjects
-     * @return MoneyValueObject
-     */
     public static function average(array $moneyObjects): MoneyValueObject
     {
-        $total = array_reduce($moneyObjects, static fn($carry, $item) => $carry + $item->getAmount(), 0);
+        $total = array_reduce($moneyObjects, static fn ($carry, $item) => $carry + $item->getAmount(), 0);
         $currency = $moneyObjects[0]->getCurrency();
+
         return new MoneyValueObject(amount: $total / count($moneyObjects), currency: $currency);
     }
 
-    /**
-     * @param array $moneyObjects
-     * @return MoneyValueObject
-     */
     public static function total(array $moneyObjects): MoneyValueObject
     {
-        $total = array_reduce($moneyObjects, static fn($carry, $item) => $carry + $item->getAmount(), 0);
+        $total = array_reduce($moneyObjects, static fn ($carry, $item) => $carry + $item->getAmount(), 0);
         $currency = $moneyObjects[0]->getCurrency();
+
         return new MoneyValueObject(amount: $total, currency: $currency);
     }
 
     /**
      * Get exchange rates from the exchange_rates.php file.
-     *
-     * @return array
      */
     private function getExchangeRates(): array
     {
+        $rates = [];
         include app_path('/Helpers/exchange_rates.php');
+
         return $rates;
     }
 
@@ -275,8 +229,7 @@ class MoneyValueObject
     {
         return [
             'amount' => $this->getAmount(),
-            'currency' => $this->getCurrency()
+            'currency' => $this->getCurrency(),
         ];
     }
 }
-

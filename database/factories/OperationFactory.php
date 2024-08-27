@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Currency;
 use App\Enums\Currency as CurrencyCatalog;
+use App\Models\Currency;
 use App\Models\Operation;
 use App\ValueObjects\MoneyValueObject;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,6 +18,7 @@ class OperationFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     *
      * @throws RandomException
      */
     public function definition(): array
@@ -40,6 +41,7 @@ class OperationFactory extends Factory
             'total' => MoneyValueObject::total([$operand1, $operand2])->getAmount(),
             'discount' => $operand1->applyDiscount($operand2->getAmount())->getAmount(),
         };
+
         return [
             'currency_id' => $currency->id,
             'operation' => $operation,

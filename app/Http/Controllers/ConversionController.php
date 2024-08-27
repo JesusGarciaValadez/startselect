@@ -26,7 +26,7 @@ class ConversionController extends Controller
     public function create()
     {
         $exchangeRates = $this->getExchangeRates();
-        $currencies = Collection::make(array_map(static function(string $id, string $rate) {
+        $currencies = Collection::make(array_map(static function (string $id, string $rate) {
             if (CurrencyCatalog::tryFrom($id)) {
                 return [
                     'id' => $id,
@@ -35,6 +35,7 @@ class ConversionController extends Controller
                     'symbol' => CurrencyCatalog::from($id)->symbol(),
                 ];
             }
+
             return null;
         }, array_keys($exchangeRates), array_values($exchangeRates)))->filter();
 
@@ -82,6 +83,7 @@ class ConversionController extends Controller
     {
         $rates = [];
         include app_path('/Helpers/exchange_rates.php');
+
         return $rates;
     }
 }

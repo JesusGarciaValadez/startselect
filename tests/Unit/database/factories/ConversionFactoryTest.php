@@ -3,8 +3,8 @@
 namespace Tests\Unit\database\factories;
 
 use App\Enums\Currency as CurrencyEnum;
-use App\Models\Currency;
 use App\Models\Conversion;
+use App\Models\Currency;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
