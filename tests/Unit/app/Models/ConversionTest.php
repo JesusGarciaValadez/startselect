@@ -145,7 +145,9 @@ class ConversionTest extends TestCase
 
     private function getExchangeRates(): array
     {
+        $rates = [];
         include app_path('/Helpers/exchange_rates.php');
+
         return $rates;
     }
 }

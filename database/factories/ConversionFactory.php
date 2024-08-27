@@ -2,14 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Currency;
 use App\Enums\Currency as CurrencyCatalog;
+use App\Models\Conversion;
+use App\Models\Currency;
 use App\ValueObjects\MoneyValueObject;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Random\RandomException;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Conversion>
+ * @extends Factory<Conversion>
  */
 class ConversionFactory extends Factory
 {
@@ -17,6 +18,7 @@ class ConversionFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     *
      * @throws RandomException
      */
     public function definition(): array
@@ -39,12 +41,12 @@ class ConversionFactory extends Factory
 
     /**
      * Get exchange rates from the exchange_rates.php file.
-     *
-     * @return array
      */
     private function getExchangeRates(): array
     {
+        $rates = [];
         include app_path('/Helpers/exchange_rates.php');
+
         return $rates;
     }
 }

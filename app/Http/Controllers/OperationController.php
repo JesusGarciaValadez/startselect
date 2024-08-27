@@ -6,6 +6,7 @@ use App\Enums\Currency;
 use App\Http\Requests\StoreOperationRequest;
 use App\Models\Operation;
 use App\ValueObjects\MoneyValueObject;
+use Exception;
 
 class OperationController extends Controller
 {
@@ -34,8 +35,8 @@ class OperationController extends Controller
     public function store(StoreOperationRequest $request)
     {
         $currency = Currency::from($request->validated('currency_id'));
-        $operand1 = New MoneyValueObject($request->validated('operand1'), $currency->name);
-        $operand2 = New MoneyValueObject($request->validated('operand2'), $currency->name);
+        $operand1 = new MoneyValueObject($request->validated('operand1'), $currency->name);
+        $operand2 = new MoneyValueObject($request->validated('operand2'), $currency->name);
         $result = match ($request->validated('operation')) {
             'add' => $operand1->add($operand2->getAmount())->getAmount(),
             'subtract' => $operand1->subtract($operand2->getAmount())->getAmount(),
@@ -63,7 +64,7 @@ class OperationController extends Controller
     {
         try {
             $operation->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with('error', 'Operation could not be deleted');
         }
 
