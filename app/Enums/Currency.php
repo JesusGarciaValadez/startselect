@@ -183,29 +183,8 @@ enum Currency: int
     public function decimals(): int
     {
         return match ($this) {
-            self::BHD => 3,
-            self::BIF => 0,
-            self::CLP => 0,
-            self::DJF => 0,
-            self::GNF => 0,
-            self::IQD => 3,
-            self::ISK => 0,
-            self::JOD => 3,
-            self::JPY => 0,
-            self::KMF => 0,
-            self::KRW => 0,
-            self::KWD => 3,
-            self::LYD => 3,
-            self::OMR => 3,
-            self::PYG => 0,
-            self::RWF => 0,
-            self::TND => 3,
-            self::UGX => 0,
-            self::VND => 0,
-            self::VUV => 0,
-            self::XAF => 0,
-            self::XOF => 0,
-            self::XPF => 0,
+            self::BHD, self::IQD, self::JOD, self::KWD, self::LYD, self::OMR, self::TND => 3,
+            self::BIF, self::CLP, self::DJF, self::GNF, self::ISK, self::JPY, self::KMF, self::KRW, self::PYG, self::RWF, self::UGX, self::VND, self::VUV, self::XAF, self::XOF, self::XPF => 0,
             default => 2,
         };
     }
@@ -241,7 +220,7 @@ enum Currency: int
             self::CAD => '$',
             self::CDF => 'CDF',
             self::CHF => 'CHF',
-            self::CLP => 'CLP',
+            self::CLP => '$',
             self::CNY => '¥',
             self::COP => '$',
             self::CRC => '₡',
@@ -377,7 +356,6 @@ enum Currency: int
             self::ZMW => 'ZK',
             self::ZWD => 'Z$',
             self::ZWL => '$',
-            default => null,
         };
     }
 }
