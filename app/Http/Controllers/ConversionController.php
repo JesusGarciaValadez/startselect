@@ -6,6 +6,7 @@ use App\Enums\Currency as CurrencyCatalog;
 use App\Http\Requests\StoreConversionRequest;
 use App\Models\Conversion;
 use App\ValueObjects\MoneyValueObject;
+use Exception;
 use Illuminate\Support\Collection;
 
 class ConversionController extends Controller
@@ -26,7 +27,7 @@ class ConversionController extends Controller
     {
         $exchangeRates = $this->getExchangeRates();
         $currencies = Collection::make(array_map(static function(string $id, string $rate) {
-            if (CurrencyCatalog::from($id)) {
+            if (CurrencyCatalog::tryFrom($id)) {
                 return [
                     'id' => $id,
                     'rate' => $rate,
@@ -34,7 +35,8 @@ class ConversionController extends Controller
                     'symbol' => CurrencyCatalog::from($id)->symbol(),
                 ];
             }
-        }, array_keys($exchangeRates), array_values($exchangeRates)));
+            return null;
+        }, array_keys($exchangeRates), array_values($exchangeRates)))->filter();
 
         return view('conversion.create')
             ->with('currencies', $currencies);
@@ -47,7 +49,7 @@ class ConversionController extends Controller
     {
         $fromCurrency = CurrencyCatalog::from($request->validated('from_currency_id'));
         $toCurrency = CurrencyCatalog::EUR;
-        $amount = New MoneyValueObject($request->validated('amount'), $fromCurrency->name);
+        $amount = new MoneyValueObject($request->validated('amount'), $fromCurrency->name);
         $payload = [
             'from_currency_id' => $fromCurrency->value,
             'to_currency_id' => $toCurrency->value,
@@ -55,7 +57,7 @@ class ConversionController extends Controller
             'conversion' => $amount->convertTo($fromCurrency->name)->getAmount(),
         ];
 
-        if (!Conversion::create($payload)) {
+        if (Conversion::create($payload) === false) {
             return back()->withInput();
         }
 
@@ -69,7 +71,7 @@ class ConversionController extends Controller
     {
         try {
             $conversion->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with('error', 'Conversion could not be deleted');
         }
 
@@ -78,6 +80,7 @@ class ConversionController extends Controller
 
     private function getExchangeRates(): array
     {
+        $rates = [];
         include app_path('/Helpers/exchange_rates.php');
         return $rates;
     }
