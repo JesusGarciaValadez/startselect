@@ -43,7 +43,7 @@ class OperationController extends Controller
         try {
             $this->operationService->deleteOperation($operation);
         } catch (Exception $e) {
-            // Handle exception
+            return back()->with('error', 'Operation could not be deleted');
         }
 
         return redirect()->route('operations');
