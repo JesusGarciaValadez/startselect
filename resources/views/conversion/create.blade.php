@@ -32,12 +32,16 @@
                                          sm:leading-6"
                                     >
                                         @foreach($currencies as $currency)
-                                            @if($loop->first)
+                                            @if($currency['id'] == old('from_currency_id'))
+                                                <option value="{{ $currency['id'] }}" selected aria-selected="true">
+                                                    {{ $currency['name'] }} - {{ $currency['symbol'] }}
+                                                </option>
+                                            @elseif($loop->first)
                                                 <option value="{{ $currency['id'] }}" selected aria-selected="true">
                                                     {{ $currency['name'] }} - {{ $currency['symbol'] }}
                                                 </option>
                                             @else
-                                                <option value="{{ $currency['id'] }}"  >
+                                                <option value="{{ $currency['id'] }}" aria-selected="true">
                                                     {{ $currency['name'] }} - {{ $currency['symbol'] }}
                                                 </option>
                                             @endif
@@ -57,12 +61,14 @@
                                                    name="amount"
                                                    id="amount"
                                                    class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20
-                                                   text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
+                                                   text-gray-900 ring-1 ring-inset ring-gray-300
+                                                   placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
                                                    @error('amount')
                                                     text-red-600 ring-red-300
                                                    @else
                                                     text-gray-900 ring-gray-300
                                                    @enderror"
+                                                   value="{{ old('amount') }}"
                                                    placeholder="0.00"
                                                    step="0.01"
                                             >

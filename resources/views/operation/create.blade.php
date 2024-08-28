@@ -27,7 +27,11 @@
                                     <select id="currency_id" name="currency_id" class="mt-2 block w-full rounded-md
                                     border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         @foreach($currencies as $currency)
-                                            @if($currency->name === 'EUR')
+                                            @if($currency->name === old('currency'))
+                                                <option value="{{ $currency }}" selected aria-selected="true">
+                                                    {{ $currency->name }} - {{ $currency->symbol() }}
+                                                </option>
+                                            @elseif($currency->name === 'EUR')
                                                 <option value="{{ $currency }}" selected aria-selected="true">
                                                     {{ $currency->name }} - {{ $currency->symbol() }}
                                                 </option>
@@ -61,6 +65,7 @@
                                                @else
                                                text-gray-900 ring-gray-300
                                                @enderror"
+                                               value="{{ old('operand1') }}"
                                                placeholder="0.00"
                                                step="0.01"
                                         >
@@ -120,12 +125,15 @@
                                                    name="operand2"
                                                    id="operand2"
                                                    class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20
-                                                   text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-                                                   @error('operand1')
+                                                   text-gray-900 ring-1 ring-inset ring-gray-300
+                                                   placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+                                                   focus:ring-indigo-600 sm:text-sm sm:leading-6
+                                                   @error('operand2')
                                                     text-red-600 ring-red-300
                                                    @else
                                                     text-gray-900 ring-gray-300
                                                    @enderror"
+                                                   value="{{ old('operand2') }}"
                                                    placeholder="0.00"
                                                    step="0.01"
                                             >
