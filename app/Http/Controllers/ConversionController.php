@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Currency as CurrencyCatalog;
 use App\Http\Requests\StoreConversionRequest;
 use App\Models\Conversion;
-use App\ValueObjects\MoneyValueObject;
+use App\Services\ConversionService;
 use Exception;
-use Illuminate\Support\Collection;
 
 class ConversionController extends Controller
 {
+    private ConversionService $conversionService;
+
+    public function __construct(ConversionService $conversionService)
+    {
+        $this->conversionService = $conversionService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         return view('conversion.index')
-            ->with('conversions', Conversion::all());
+            ->with('conversions', $this->conversionService->getAllConversions());
     }
 
     /**
@@ -25,19 +30,7 @@ class ConversionController extends Controller
      */
     public function create()
     {
-        $exchangeRates = $this->getExchangeRates();
-        $currencies = Collection::make(array_map(static function (string $id, string $rate) {
-            if (CurrencyCatalog::tryFrom($id)) {
-                return [
-                    'id' => $id,
-                    'rate' => $rate,
-                    'name' => CurrencyCatalog::from($id)->name,
-                    'symbol' => CurrencyCatalog::from($id)->symbol(),
-                ];
-            }
-
-            return null;
-        }, array_keys($exchangeRates), array_values($exchangeRates)))->filter();
+        $currencies = $this->conversionService->getCurrenciesWithRates();
 
         return view('conversion.create')
             ->with('currencies', $currencies);
@@ -48,17 +41,7 @@ class ConversionController extends Controller
      */
     public function store(StoreConversionRequest $request)
     {
-        $fromCurrency = CurrencyCatalog::from($request->validated('from_currency_id'));
-        $toCurrency = CurrencyCatalog::EUR;
-        $amount = new MoneyValueObject($request->validated('amount'), $fromCurrency->name);
-        $payload = [
-            'from_currency_id' => $fromCurrency->value,
-            'to_currency_id' => $toCurrency->value,
-            'amount' => $amount->getAmount(),
-            'conversion' => $amount->convertTo($fromCurrency->name)->getAmount(),
-        ];
-
-        if (Conversion::create($payload) === false) {
+        if ($this->conversionService->storeConversion($request->validated()) === false) {
             return back()->withInput();
         }
 
@@ -71,19 +54,11 @@ class ConversionController extends Controller
     public function destroy(Conversion $conversion)
     {
         try {
-            $conversion->delete();
+            $this->conversionService->deleteConversion($conversion);
         } catch (Exception $e) {
             return back()->with('error', 'Conversion could not be deleted');
         }
 
         return redirect()->route('conversions');
-    }
-
-    private function getExchangeRates(): array
-    {
-        $rates = [];
-        include app_path('/Helpers/exchange_rates.php');
-
-        return $rates;
     }
 }
