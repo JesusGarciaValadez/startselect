@@ -11,7 +11,7 @@ class OperationService
 {
     public function getAllOperations(): Collection
     {
-        return Operation::all();
+        return Operation::all()->sortByDesc('created_at');
     }
 
     public function getCurrencies(): array
