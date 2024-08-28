@@ -6,6 +6,7 @@ use App\Enums\Currency;
 use App\Models\Operation;
 use App\ValueObjects\MoneyValueObject;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class OperationService
 {
@@ -39,6 +40,7 @@ class OperationService
             'avg' => MoneyValueObject::average([$operand1, $operand2])->getAmount(),
             'total' => MoneyValueObject::total([$operand1, $operand2])->getAmount(),
             'discount' => $operand1->applyDiscount($operand2->getAmount())->getAmount(),
+            default => throw new InvalidArgumentException('Invalid operation type'),
         };
         $payload = array_merge($data, ['result' => $result]);
 

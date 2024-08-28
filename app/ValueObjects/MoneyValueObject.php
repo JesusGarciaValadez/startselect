@@ -39,7 +39,7 @@ class MoneyValueObject
 
     public function getCurrencyId(): int
     {
-        return Currency::key($this->currency);
+        return Currency::key($this->currency) ? Currency::key($this->currency) : 0;
     }
 
     /**
@@ -77,9 +77,9 @@ class MoneyValueObject
      */
     public function add(float $other): MoneyValueObject
     {
-        $result = bcadd($this->getAmount(), (string) $other, 10); // Use high precision
+        $result = bcadd(number_format($this->getAmount(), 10, '.', ''), number_format($other, 10, '.', ''), 10); // Use high precision
 
-        return new self(amount: $result, currency: $this->getCurrency());
+        return new self((float) $result, $this->getCurrency());
     }
 
     /**
@@ -89,9 +89,9 @@ class MoneyValueObject
      */
     public function subtract(float $other): MoneyValueObject
     {
-        $result = bcsub($this->getAmount(), (string) $other, 10); // Use high precision
+        $result = bcsub(number_format($this->getAmount(), 10, '.', ''), number_format($other, 10, '.', ''), 10); // Use high precision
 
-        return new self(amount: $result, currency: $this->getCurrency());
+        return new self((float) $result, $this->getCurrency());
     }
 
     /**
@@ -99,9 +99,9 @@ class MoneyValueObject
      */
     public function multiply(float $factor): MoneyValueObject
     {
-        $result = bcmul($this->getAmount(), (string) $factor, 10); // Use high precision
+        $result = bcmul(number_format($this->getAmount(), 10, '.', ''), number_format($factor, 10, '.', ''), 10); // Use high precision
 
-        return new self(amount: $result, currency: $this->getCurrency());
+        return new self((float) $result, $this->getCurrency());
     }
 
     /**
@@ -109,9 +109,9 @@ class MoneyValueObject
      */
     public function divide(float $divisor): MoneyValueObject
     {
-        $result = bcdiv($this->getAmount(), (string) $divisor, 10); // Use high precision
+        $result = bcdiv(number_format($this->getAmount(), 10, '.', ''), number_format($divisor, 10, '.', ''), 10); // Use high precision
 
-        return new self(amount: $result, currency: $this->getCurrency());
+        return new self((float) $result, $this->getCurrency());
     }
 
     /**
@@ -119,9 +119,9 @@ class MoneyValueObject
      */
     public function applyDiscount(float $percentage): MoneyValueObject
     {
-        $discountedAmount = bcmul($this->getAmount(), (string) ((100 - $percentage) / 100), 10);
+        $discountedAmount = bcmul(number_format($this->getAmount(), 10, '.', ''), number_format((100 - $percentage) / 100, 10, '.', ''), 10);
 
-        return new self(amount: $discountedAmount, currency: $this->getCurrency());
+        return new self((float) $discountedAmount, $this->getCurrency());
     }
 
     /**
@@ -131,7 +131,7 @@ class MoneyValueObject
      */
     public function convertTo(string $toCurrency): MoneyValueObject
     {
-        if (Currency::key($this->currency) === null) {
+        if (! Currency::key($this->currency)) {
             throw new InvalidArgumentException('Invalid currency code.');
         }
 
@@ -154,21 +154,9 @@ class MoneyValueObject
         $rateFrom = 1;
         $rateTo = $exchangeRates[$currencyToConvert->value];
 
-        $convertedAmount = bcmul($this->getAmount(), (string) ($rateTo / $rateFrom), 10);
+        $convertedAmount = bcmul(number_format($this->getAmount(), 10, '.', ''), number_format($rateTo / $rateFrom, 10, '.', ''), 10);
 
-        return new self($convertedAmount, $toCurrency);
-    }
-
-    /**
-     * Ensure that both MoneyValueObject instances have the same currency.
-     *
-     * @throws InvalidArgumentException
-     */
-    private function ensureSameCurrency(MoneyValueObject $other): void
-    {
-        if ($this->getCurrency() !== $other->getCurrency()) {
-            throw new InvalidArgumentException('Currency mismatch between '.$this->getCurrency().' and '.$other->getCurrency());
-        }
+        return new self((float) $convertedAmount, $toCurrency);
     }
 
     public static function min(array $moneyObjects): MoneyValueObject
