@@ -12,7 +12,7 @@ class CurrencyTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function it_can_create_a_currency(): void
+    public function itCanCreateACurrency(): void
     {
         Currency::create(['code' => 'USD']);
 
@@ -23,7 +23,7 @@ class CurrencyTest extends TestCase
     }
 
     #[Test]
-    public function it_can_update_a_currency(): void
+    public function itCanUpdateACurrency(): void
     {
         $currency = Currency::create(['code' => 'USD']);
         $currency->update(['code' => 'JPY']);
@@ -35,7 +35,7 @@ class CurrencyTest extends TestCase
     }
 
     #[Test]
-    public function it_can_delete_a_currency(): void
+    public function itCanDeleteACurrency(): void
     {
         $currency = Currency::create(['code' => 'USD']);
         $currency->delete();

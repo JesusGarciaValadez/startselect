@@ -21,20 +21,28 @@
                             </div>
                             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                                 <a href="{{ route('operation.create') }}"
-                                   class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">New
-                                    operation</a>
+                                   class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold
+                                   text-white shadow-sm hover:bg-indigo-500 focus-visible:outline
+                                   focus-visible:outline-2 focus-visible:outline-offset-2
+                                   focus-visible:outline-indigo-600"
+                                   dusk="create_operation"
+                                >
+                                    New operation
+                                </a>
                             </div>
                         </div>
                         <div class="mt-8 flow-root">
                             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                                     @if(count($operations) <= 0)
-                                        <h2 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">No
-                                            new operations to show.</h2>
+                                        <h2 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                                            No new operations to show.
+                                        </h2>
                                     @else
                                         @error('error')
-                                        <div
-                                            class="block text-sm font-medium leading-6 text-red-600">{{ $message }}</div>
+                                        <div class="block text-sm font-medium leading-6 text-red-600">
+                                            {{ $message }}
+                                        </div>
                                         @enderror
                                         <x-table :headers="['Operand 1', '', 'Operand 2', 'Result', '']">
                                             <x-slot:rows>
@@ -80,16 +88,20 @@
                                                         </td>
                                                         <td class="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                                                             <form method="POST"
-                                                                  action="{{ route('operation.destroy', ['operation' => $operation]) }}">
+                                                                  action="{{ route('operation.destroy', ['operation' => $operation]) }}"
+                                                            >
                                                                 @method('DELETE')
                                                                 @csrf
-                                                                <button type="submit" class="inline-flex
-                                                                justify-center rounded-md bg-red-600 px-3 py-2
-                                                                text-sm font-semibold text-white shadow-sm
-                                                                hover:bg-red-500 focus-visible:outline
-                                                                focus-visible:outline-2
-                                                                focus-visible:outline-offset-2
-                                                                focus-visible:outline-red-600">Delete
+                                                                <button type="submit"
+                                                                        class="inline-flex justify-center rounded-md
+                                                                        bg-red-600 px-3 py-2 text-sm font-semibold
+                                                                        text-white shadow-sm hover:bg-red-500
+                                                                        focus-visible:outline focus-visible:outline-2
+                                                                         focus-visible:outline-offset-2
+                                                                         focus-visible:outline-red-600"
+                                                                        dusk="delete_operation_{{ $operation->id }}"
+                                                                >
+                                                                    Delete
                                                                 </button>
                                                             </form>
                                                         </td>

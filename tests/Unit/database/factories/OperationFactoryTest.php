@@ -14,7 +14,7 @@ class OperationFactoryTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function it_creates_a_valid_operation(): void
+    public function itCreatesAValidOperation(): void
     {
         array_map(static function (CurrencyEnum $currency) {
             Currency::factory()->create(['id' => $currency->value, 'code' => $currency->name]);

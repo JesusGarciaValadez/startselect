@@ -12,7 +12,7 @@ class CurrencyFactoryTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function it_creates_a_valid_currency(): void
+    public function itCreatesAValidCurrency(): void
     {
         $currency = Currency::factory()->create();
 

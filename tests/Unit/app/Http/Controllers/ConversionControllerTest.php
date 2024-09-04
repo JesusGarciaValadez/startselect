@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature\App\Http\Controllers;
 
 use App\Enums\Currency as CurrencyEnum;
 use App\Models\Conversion;
@@ -17,8 +17,20 @@ class ConversionControllerTest extends TestCase
 
     private ConversionService $conversionService;
 
+    /**
+     * @throws BindingResolutionException
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->conversionService = $this->app->make(ConversionService::class);
+        array_map(static function (CurrencyEnum $currency) {
+            Currency::factory()->create(['id' => $currency->value, 'code' => $currency->name]);
+        }, CurrencyEnum::cases());
+    }
+
     #[Test]
-    public function it_shows_all_the_conversions_available(): void
+    public function itShowsAllTheConversionsAvailable(): void
     {
         $response = $this->get(route('conversions'));
 
@@ -27,7 +39,7 @@ class ConversionControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_shows_the_form_to_create_a_new_conversion(): void
+    public function itShowsTheFormToCreateANewConversion(): void
     {
         $response = $this->get(route('conversion.create'));
 
@@ -36,7 +48,7 @@ class ConversionControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_stores_a_new_conversion(): void
+    public function itStoresANewConversion(): void
     {
         $data = [
             'from_currency_id' => 69,
@@ -53,7 +65,7 @@ class ConversionControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_destroys_a_given_conversion(): void
+    public function itDestroysAGivenConversion(): void
     {
         $conversion = Conversion::factory()->create();
 
@@ -61,17 +73,5 @@ class ConversionControllerTest extends TestCase
 
         $response->assertRedirect(route('conversions'));
         $this->assertDatabaseMissing('conversions', ['id' => $conversion->id]);
-    }
-
-    /**
-     * @throws BindingResolutionException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->conversionService = $this->app->make(ConversionService::class);
-        array_map(static function (CurrencyEnum $currency) {
-            Currency::factory()->create(['id' => $currency->value, 'code' => $currency->name]);
-        }, CurrencyEnum::cases());
     }
 }

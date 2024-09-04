@@ -14,7 +14,7 @@ class ConversionFactoryTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function it_can_create_a_conversion_with_factory(): void
+    public function itCanCreateAConversionWithFactory(): void
     {
         array_map(static function (CurrencyEnum $currency) {
             Currency::factory()->create(['id' => $currency->value, 'code' => $currency->name]);

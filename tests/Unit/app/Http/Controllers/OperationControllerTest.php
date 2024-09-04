@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature\App\Http\Controllers;
 
 use App\Enums\Currency as CurrencyEnum;
 use App\Models\Currency;
@@ -17,8 +17,20 @@ class OperationControllerTest extends TestCase
 
     private OperationService $operationService;
 
+    /**
+     * @throws BindingResolutionException
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->operationService = $this->app->make(OperationService::class);
+        array_map(static function (CurrencyEnum $currency) {
+            Currency::factory()->create(['id' => $currency->value, 'code' => $currency->name]);
+        }, CurrencyEnum::cases());
+    }
+
     #[Test]
-    public function it_shows_all_the_operations(): void
+    public function itShowsAllTheOperations(): void
     {
         $response = $this->get(route('operations'));
 
@@ -27,7 +39,7 @@ class OperationControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_shows_the_form_to_create_a_new_operation(): void
+    public function itShowsTheFormToCreateANewOperation(): void
     {
         $response = $this->get(route('operation.create'));
 
@@ -37,7 +49,7 @@ class OperationControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_stores_a_new_operation(): void
+    public function itStoresANewOperation(): void
     {
         $data = [
             'currency_id' => 1,
@@ -58,7 +70,7 @@ class OperationControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_destroys_a_given_operation(): void
+    public function itDestroysAGivenOperation(): void
     {
         $operation = Operation::factory()->create();
 
@@ -66,17 +78,5 @@ class OperationControllerTest extends TestCase
 
         $response->assertRedirect(route('operations'));
         $this->assertDatabaseMissing('operations', ['id' => $operation->id]);
-    }
-
-    /**
-     * @throws BindingResolutionException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->operationService = $this->app->make(OperationService::class);
-        array_map(static function (CurrencyEnum $currency) {
-            Currency::factory()->create(['id' => $currency->value, 'code' => $currency->name]);
-        }, CurrencyEnum::cases());
     }
 }
