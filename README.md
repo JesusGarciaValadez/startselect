@@ -4,12 +4,6 @@
 composer install
 ```
 
-## Execute the tests
-
-```bash
-./vendor/bin/phpunit
-```
-
 ## Prepare the database
 
 Create the database locally and change the following environment variables in the `.env` file to match your database credentials:
@@ -32,4 +26,16 @@ php artisan migrate:fresh;
 
 ```bash
 php artisan serve
+```
+
+## Execute the tests
+
+```bash
+./vendor/bin/phpunit
+```
+
+## Execute the E2E tests
+
+```bash
+php artisan dusk
 ```
