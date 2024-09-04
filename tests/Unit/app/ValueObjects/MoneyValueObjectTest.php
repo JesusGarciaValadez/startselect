@@ -4,13 +4,16 @@ namespace Tests\Unit\app\ValueObjects;
 
 use App\Enums\Currency;
 use App\ValueObjects\MoneyValueObject;
+use ArgumentCountError;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use TypeError;
 
 class MoneyValueObjectTest extends TestCase
 {
     #[Test]
-    public function it_is_created(): void
+    public function itIsCreated(): void
     {
         $amount = 100;
         $currency = 'usd';
@@ -21,9 +24,9 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_has_an_invalid_currency_code(): void
+    public function itHasAnInvalidCurrencyCode(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $amount = 100;
         $currency = 'INVALID';
 
@@ -31,7 +34,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_adds_more_money(): void
+    public function itAddsMoreMoney(): void
     {
         $money1 = new MoneyValueObject(amount: 50, currency: 'USD');
         $money2 = new MoneyValueObject(amount: 20, currency: 'USD');
@@ -43,7 +46,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_subtracts_money(): void
+    public function itSubtractsMoney(): void
     {
         $money1 = new MoneyValueObject(amount: 50, currency: 'USD');
         $money2 = new MoneyValueObject(amount: 20, currency: 'USD');
@@ -55,7 +58,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_multiplies_money(): void
+    public function itMultipliesMoney(): void
     {
         $money = new MoneyValueObject(amount: 50, currency: 'USD');
         $result = $money->multiply(2);
@@ -65,7 +68,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_divides_in_parts(): void
+    public function itDividesInParts(): void
     {
         $money = new MoneyValueObject(amount: 50, currency: 'USD');
         $result = $money->divide(2);
@@ -75,7 +78,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_applies_a_discount(): void
+    public function itAppliesADiscount(): void
     {
         $money = new MoneyValueObject(amount: 100, currency: 'USD');
         $result = $money->applyDiscount(10); // 10% discount
@@ -85,7 +88,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function test_currency_conversion(): void
+    public function test_CurrencyConversion(): void
     {
         $euros = new MoneyValueObject(amount: 100, currency: 'EUR');
         $result = $euros->convertTo('CHF');
@@ -95,16 +98,16 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function test_invalid_currency_conversion(): void
+    public function testInvalidCurrencyConversion(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $euros = new MoneyValueObject(amount: 100, currency: 'EUR');
         $euros->convertTo('USD');
     }
 
     #[Test]
-    public function it_tests_money_comparisons(): void
+    public function itTestsMoneyComparisons(): void
     {
         $money1 = new MoneyValueObject(amount: 50, currency: 'USD');
         $money2 = new MoneyValueObject(amount: 20, currency: 'USD');
@@ -122,7 +125,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_tests_money_zero_amount(): void
+    public function itTestsMoneyZeroAmount(): void
     {
         $money = new MoneyValueObject(amount: 0, currency: 'USD');
         $this->assertEquals(0, $money->getAmount());
@@ -130,7 +133,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_tests_money_negative_amount(): void
+    public function itTestsMoneyNegativeAmount(): void
     {
         $money = new MoneyValueObject(amount: -50, currency: 'USD');
         $this->assertEquals(-50, $money->getAmount());
@@ -138,7 +141,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_tests_money_large_amount(): void
+    public function itTestsMoneyLargeAmount(): void
     {
         $money = new MoneyValueObject(amount: 9999999999.99, currency: 'USD');
         $result = $money->multiply(2);
@@ -148,7 +151,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_test_money_floating_point_precision(): void
+    public function itTestMoneyFloatingPointPrecision(): void
     {
         $money = new MoneyValueObject(amount: 0.1, currency: 'USD');
         $result = $money->multiply(3);
@@ -158,55 +161,55 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_test_invalid_currency_code(): void
+    public function itTestInvalidCurrencyCode(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $money = new MoneyValueObject(amount: 100, currency: 'INVALID');
     }
 
     #[Test]
-    public function it_tests_empty_amount(): void
+    public function itTestsEmptyAmount(): void
     {
-        $this->expectException(\TypeError::class); // or use custom validation exceptions
+        $this->expectException(TypeError::class); // or use custom validation exceptions
 
         // Assuming your Operation class requires both amount and currency
         new MoneyValueObject(amount: null, currency: 'USD');
     }
 
     #[Test]
-    public function it_tests_empty_currency(): void
+    public function itTestsEmptyCurrency(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $money = new MoneyValueObject(amount: 100, currency: '');
     }
 
     #[Test]
-    public function it_tests_missing_amount(): void
+    public function itTestsMissingAmount(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         new MoneyValueObject(currency: 'USD');
     }
 
     #[Test]
-    public function it_tests_money_non_numeric_amount(): void
+    public function itTestsMoneyNonNumericAmount(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         new MoneyValueObject(amount: 'EUR', currency: 'USD');
     }
 
     #[Test]
-    public function it_tests_missing_currency(): void
+    public function itTestsMissingCurrency(): void
     {
-        $this->expectException(\ArgumentCountError::class);
+        $this->expectException(ArgumentCountError::class);
 
         new MoneyValueObject(amount: 100);
     }
 
     #[Test]
-    public function it_tests_chained_operations(): void
+    public function itTestsChainedOperations(): void
     {
         $money1 = new MoneyValueObject(amount: 100, currency: 'USD');
         $money2 = new MoneyValueObject(amount: 50, currency: 'USD');
@@ -218,7 +221,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_tests_apply_full_discount(): void
+    public function itTestsApplyFullDiscount(): void
     {
         $money = new MoneyValueObject(amount: 100, currency: 'USD');
         $result = $money->applyDiscount(100);
@@ -228,7 +231,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_gets_an_array_from_moneyValueObject(): void
+    public function itGetsAnArrayFromMoneyValueObject(): void
     {
         $money = new MoneyValueObject(amount: 0, currency: 'USD');
 
@@ -236,7 +239,7 @@ class MoneyValueObjectTest extends TestCase
     }
 
     #[Test]
-    public function it_gets_the_currency_id(): void
+    public function itGetsTheCurrencyId(): void
     {
         $money = new MoneyValueObject(amount: 0, currency: 'USD');
 

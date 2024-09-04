@@ -24,8 +24,8 @@
                             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                 <x-form-select id="from_currency_id"
                                                name="from_currency_id"
-                                               :options="$currencies"
                                                label="Convert from currency to EUR:"
+                                               :options="$currencies"
                                                :selected="old('from_currency_id')"
                                 />
                                 <x-form-number-input id="amount"
@@ -38,13 +38,17 @@
                     </div>
                 </div>
                 <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <a href="{{ route('conversions') }}" class="text-sm font-semibold leading-6 text-gray-900">
+                    <a href="{{ route('conversions') }}"
+                       class="text-sm font-semibold leading-6 text-gray-900"
+                       dusk="cancel"
+                    >
                         Cancel
                     </a>
                     <button type="submit"
                             class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold
                             text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2
                             focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            dusk="save"
                     >
                         Save
                     </button>

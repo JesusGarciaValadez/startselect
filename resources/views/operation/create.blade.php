@@ -16,7 +16,9 @@
             </p>
         </div>
         <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-            <form method="POST" action="{{ route('operation.store') }}">
+            <form method="POST"
+                  action="{{ route('operation.store') }}"
+            >
                 @csrf
                 <div class="space-y-12 sm:space-y-16">
                     <div>
@@ -53,6 +55,7 @@
                                                 text-center shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2
                                                 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm
                                                 sm:leading-6"
+                                                dusk="operation"
                                         >
                                             @foreach($operations as $operation)
                                                 @php
@@ -92,11 +95,17 @@
                     </div>
                 </div>
                 <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <a href="{{ route('operations') }}" class="text-sm font-semibold leading-6 text-gray-900">Cancel</a>
+                    <a href="{{ route('operations') }}"
+                       class="text-sm font-semibold leading-6 text-gray-900"
+                       dusk="cancel"
+                    >
+                        Cancel
+                    </a>
                     <button type="submit"
                             class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold
                             text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2
                             focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            dusk="save"
                     >
                         Save
                     </button>

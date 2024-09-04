@@ -17,25 +17,34 @@
                         <div class="sm:flex sm:items-center">
                             <div class="sm:flex-auto">
                                 <h1 class="text-base font-semibold leading-6 text-gray-900">Conversions</h1>
-                                <p class="mt-2 text-sm text-gray-700">A table of money currency conversions from EUR to
-                                    other currencies.</p>
+                                <p class="mt-2 text-sm text-gray-700">
+                                    A table of money currency conversions from EUR to other currencies.
+                                </p>
                             </div>
                             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                                 <a href="{{ route('conversion.create') }}"
-                                   class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">New
-                                    conversion</a>
+                                   class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold
+                                   text-white shadow-sm hover:bg-indigo-500 focus-visible:outline
+                                   focus-visible:outline-2 focus-visible:outline-offset-2
+                                   focus-visible:outline-indigo-600"
+                                   dusk="create_conversion"
+                                >
+                                    New conversion
+                                </a>
                             </div>
                         </div>
                         <div class="mt-8 flow-root">
                             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                                     @if(count($conversions) <= 0)
-                                        <h2 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">No
-                                            new conversions to show.</h2>
+                                        <h2 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                                            No new conversions to show.
+                                        </h2>
                                     @else
                                         @error('error')
-                                        <div
-                                            class="block text-sm font-medium leading-6 text-red-600">{{ $message }}</div>
+                                        <div class="block text-sm font-medium leading-6 text-red-600">
+                                            {{ $message }}
+                                        </div>
                                         @enderror
                                         <x-table :headers="['From Currency', 'Amount', 'Converted Amount', '']">
                                             <x-slot:rows>
@@ -69,6 +78,8 @@
                                                                         focus-visible:outline  focus-visible:outline-2
                                                                         focus-visible:outline-offset-2
                                                                         focus-visible:outline-red-600"
+                                                                        dusk="delete_conversion_{{
+                                                                        $conversion->id }}"
                                                                 >
                                                                     Delete
                                                                 </button>

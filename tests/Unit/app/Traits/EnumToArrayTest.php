@@ -9,26 +9,26 @@ use Tests\TestCase;
 class EnumToArrayTest extends TestCase
 {
     #[Test]
-    public function it_can_get_names(): void
+    public function itCanGetNames(): void
     {
         $this->assertCount(count(Currency::cases()), Currency::names());
     }
 
     #[Test]
-    public function it_can_get_values(): void
+    public function itCanGetValues(): void
     {
         $this->assertArrayHasKey(1, Currency::values());
     }
 
     #[Test]
-    public function it_can_check_if_key_exists(): void
+    public function itCanCheckIfKeyExists(): void
     {
         $this->assertTrue(Currency::key('USD'));
         $this->assertFalse(Currency::key('GBM'));
     }
 
     #[Test]
-    public function it_can_get_array_representation(): void
+    public function itCanGetArrayRepresentation(): void
     {
         $this->assertCount(count(Currency::cases()), Currency::array());
         $this->assertCount(164, Currency::array());

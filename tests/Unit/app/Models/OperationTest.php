@@ -14,7 +14,7 @@ class OperationTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function it_can_create_a_money_model(): void
+    public function itCanCreateAMoneyModel(): void
     {
         $currency = Currency::factory()->create(['code' => 'EUR']);
         $moneyModel = Operation::create([
@@ -31,7 +31,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_can_save_a_money_model_to_database(): void
+    public function itCanSaveAMoneyModelToDatabase(): void
     {
         $currency = Currency::factory()->create(['code' => 'GBP']);
         $moneyModel = new Operation([
@@ -50,7 +50,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_can_update_a_money_model_in_database(): void
+    public function itCanUpdateMoneyModelInDatabase(): void
     {
         $currency = Currency::factory()->create(['code' => 'JPY']);
         $moneyModel = new Operation([
@@ -75,7 +75,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_can_delete_a_money_model_from_database(): void
+    public function itCanDeleteAMoneyModelFromDatabase(): void
     {
         $currency = Currency::factory()->create(['code' => 'AUD']);
         $moneyModel = Operation::create([
@@ -95,7 +95,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_amount_is_missing(): void
+    public function itThrowsExceptionWhenAmountIsMissing(): void
     {
         $this->expectException(QueryException::class);
 
@@ -103,7 +103,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_currency_is_missing(): void
+    public function itThrowsExceptionWhenCurrencyIsMissing(): void
     {
         $this->expectException(QueryException::class);
 
@@ -111,7 +111,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_currency_is_not_a_string(): void
+    public function itThrowsExceptionWhenCurrencyIsNotAString(): void
     {
         $this->expectException(QueryException::class);
 
@@ -119,7 +119,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_amount_is_not_a_number(): void
+    public function itThrowsExceptionWhenAmountIsNotANumber(): void
     {
         $this->expectException(QueryException::class);
 
@@ -127,7 +127,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_currency_is_not_a_valid_currency(): void
+    public function itThrowsAnExceptionWhenTheCurrencyIsNotAValidOne(): void
     {
         $this->expectException(QueryException::class);
 
@@ -135,7 +135,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_operation_is_missing(): void
+    public function itThrowsAnExceptionWhenTheOperationIsMissing(): void
     {
         $this->expectException(QueryException::class);
 
@@ -143,7 +143,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_operation_is_not_a_string(): void
+    public function itThrowsExceptionWhenOperationIsNotAString(): void
     {
         $this->expectException(QueryException::class);
 
@@ -151,7 +151,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_operation_is_not_a_valid_operation(): void
+    public function itThrowsAnExceptionWhenAnOperationIsNotAValidOne(): void
     {
         $this->expectException(QueryException::class);
 
@@ -159,7 +159,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_operand1_is_missing(): void
+    public function itThrowsAnExceptionWhenTheOperand1IsMissing(): void
     {
         $this->expectException(QueryException::class);
 
@@ -167,7 +167,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_operand1_is_not_a_number(): void
+    public function itThrowsAnExceptionWhenTheOperand1IsNotANumber(): void
     {
         $this->expectException(QueryException::class);
 
@@ -175,7 +175,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_operand2_is_missing(): void
+    public function itThrowsAnExceptionWhenTheOperand2IsMissing(): void
     {
         $this->expectException(QueryException::class);
 
@@ -183,7 +183,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_operand2_is_not_a_number(): void
+    public function itThrowsAnExceptionWhenTheOperand2IsNotANumber(): void
     {
         $this->expectException(QueryException::class);
 
@@ -191,7 +191,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_result_is_missing(): void
+    public function itThrowsAnExceptionWhenTheResultIsMissing(): void
     {
         $this->expectException(QueryException::class);
 
@@ -199,7 +199,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_exception_when_result_is_not_a_number(): void
+    public function itThrowsAnExceptionWhenTheResultIsNotANumber(): void
     {
         $this->expectException(QueryException::class);
 
@@ -207,7 +207,7 @@ class OperationTest extends TestCase
     }
 
     #[Test]
-    public function it_can_retrieve_currency(): void
+    public function itCanRetrieveCurrency(): void
     {
         $currency = Currency::factory()->create(['code' => 'JPY']);
         $operation = Operation::create([

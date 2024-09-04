@@ -15,7 +15,7 @@ class ConversionTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function it_can_create_a_conversion(): void
+    public function itCanCreateAConversion(): void
     {
         $exchangeRates = $this->getExchangeRates();
         array_map(static function (CurrencyEnum $currency) {
@@ -42,7 +42,7 @@ class ConversionTest extends TestCase
     }
 
     #[Test]
-    public function it_can_update_a_conversion(): void
+    public function itCanUpdateAConversion(): void
     {
         $exchangeRates = $this->getExchangeRates();
         array_map(static function (CurrencyEnum $currency) {
@@ -74,7 +74,7 @@ class ConversionTest extends TestCase
     }
 
     #[Test]
-    public function it_can_delete_a_conversion(): void
+    public function itCanDeleteAConversion(): void
     {
         $exchangeRates = $this->getExchangeRates();
         array_map(static function (CurrencyEnum $currency) {
@@ -102,7 +102,7 @@ class ConversionTest extends TestCase
     }
 
     #[Test]
-    public function it_can_retrieve_from_currency(): void
+    public function itCanRetrieveFromCurrency(): void
     {
         $exchangeRates = $this->getExchangeRates();
         array_map(static function (CurrencyEnum $currency) {
@@ -123,7 +123,7 @@ class ConversionTest extends TestCase
     }
 
     #[Test]
-    public function it_can_retrieve_to_currency(): void
+    public function itCanRetrieveToCurrency(): void
     {
         $exchangeRates = $this->getExchangeRates();
         array_map(static function (CurrencyEnum $currency) {

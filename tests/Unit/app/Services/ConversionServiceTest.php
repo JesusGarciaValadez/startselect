@@ -18,8 +18,20 @@ class ConversionServiceTest extends TestCase
 
     private ConversionService $conversionService;
 
+    /**
+     * @throws BindingResolutionException
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->conversionService = $this->app->make(ConversionService::class);
+        array_map(static function (CurrencyEnum $currency) {
+            Currency::factory()->create(['id' => $currency->value, 'code' => $currency->name]);
+        }, CurrencyEnum::cases());
+    }
+
     #[Test]
-    public function it_gets_all_conversions(): void
+    public function itGetsAllConversions(): void
     {
         Conversion::factory()->count(3)->create();
 
@@ -29,7 +41,7 @@ class ConversionServiceTest extends TestCase
     }
 
     #[Test]
-    public function get_currencies_with_rates(): void
+    public function getCurrenciesWithRates(): void
     {
         $currencies = $this->conversionService->getCurrenciesWithRates();
 
@@ -37,7 +49,7 @@ class ConversionServiceTest extends TestCase
     }
 
     #[Test]
-    public function it_stores_conversion(): void
+    public function itStoresConversion(): void
     {
         $data = [
             'from_currency_id' => 69,
@@ -54,24 +66,12 @@ class ConversionServiceTest extends TestCase
     }
 
     #[Test]
-    public function it_deleted_conversion(): void
+    public function itDeletedConversion(): void
     {
         $conversion = Conversion::factory()->create();
 
         $this->conversionService->deleteConversion($conversion);
 
         $this->assertDatabaseMissing('conversions', ['id' => $conversion->id]);
-    }
-
-    /**
-     * @throws BindingResolutionException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->conversionService = $this->app->make(ConversionService::class);
-        array_map(static function (CurrencyEnum $currency) {
-            Currency::factory()->create(['id' => $currency->value, 'code' => $currency->name]);
-        }, CurrencyEnum::cases());
     }
 }

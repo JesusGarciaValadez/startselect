@@ -14,6 +14,7 @@
                placeholder="{{ $placeholder }}"
                value="{{ $value }}"
                step="{{ $step }}"
+               dusk="{{ $name }}"
         >
     </div>
     @error($name)
